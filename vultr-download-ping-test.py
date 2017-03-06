@@ -6,6 +6,24 @@ import sys
 import re
 import subprocess
 
+if sys.version_info[0] < 3:
+    raise Exception("python3 is required")
+
+if sys.version_info[1] < 5:
+    # monkey patch for < py3.5
+    def run(args, stdin=None, stdout=None, stderr=None, shell=False):
+        p = subprocess.Popen(args, stdin=stdin, stdout=stdout, 
+                             stderr=stderr, shell=shell)
+        p.wait()
+        if stdout is subprocess.PIPE:
+            p.stdout = p.stdout.read()
+        if stderr is subprocess.PIPE:
+            p.stderr = p.stderr.read()
+        return p
+    subprocess.run = run
+
+
+
 v = """
 Frankfurt, DE: https://fra-de-ping.vultr.com/vultr.com.100MB.bin
 Paris, France: https://par-fr-ping.vultr.com/vultr.com.100MB.bin
@@ -60,7 +78,8 @@ def download_test(url):
                        stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
     if r.returncode == 0:
         out = r.stdout.decode(locale.getpreferredencoding()).strip()
-        m = re.search(r":[0-9]+ \(([0-9]+.*?)\).*`{}' saved".format(devnull), out)
+        out = '\n'.join(out.split('\n')[-2:])
+        m = re.search(r":[0-9]+ \(([0-9]+.*?)\).*[^\s]{}[^\s]".format(devnull), out)
         if m:
             return m.group(1)
 
@@ -69,7 +88,6 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description='vultr.com connecting test')
     args = parser.parse_args()
-
     for name, url in map(lambda x: x.split(': '), v.strip().split('\n')):
         host = url.split('/', 3)[2]
         r = ping_test(host)
