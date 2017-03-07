@@ -5,23 +5,19 @@
 import sys
 import re
 import subprocess
+from subprocess import TimeoutExpired
 
 if sys.version_info[0] < 3:
     raise Exception("python3 is required")
 
 if sys.version_info[1] < 5:
     # monkey patch for < py3.5
-    def run(args, stdin=None, stdout=None, stderr=None, shell=False):
-        p = subprocess.Popen(args, stdin=stdin, stdout=stdout, 
-                             stderr=stderr, shell=shell)
-        p.wait()
-        if stdout is subprocess.PIPE:
-            p.stdout = p.stdout.read()
-        if stderr is subprocess.PIPE:
-            p.stderr = p.stderr.read()
+    def run(args, input=None, stdout=None, stderr=None, shell=False, timeout=None):
+        
+        p = subprocess.Popen(args, stdout=stdout, stderr=stderr, shell=shell)
+        p.stdout, p.stderr = p.communicate(input=input, timeout=timeout)
         return p
     subprocess.run = run
-
 
 
 v = """
@@ -74,8 +70,12 @@ def ping_test(host, count=5):
 def download_test(url):
     import locale
     from os import devnull
-    r = subprocess.run(['wget', '--no-check-certificate', '-O', devnull, url], 
-                       stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    try:
+        r = subprocess.run(['wget', '--no-check-certificate', '-O', devnull, url], 
+                           stderr=subprocess.STDOUT, stdout=subprocess.PIPE, 
+                           timeout=3600)
+    except TimeoutExpired:
+        return None
     if r.returncode == 0:
         out = r.stdout.decode(locale.getpreferredencoding()).strip()
         out = '\n'.join(out.split('\n')[-2:])
