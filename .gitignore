@@ -1,1 +1,9 @@
 .DS_Store
+__pycache__*
+__pycache__/*
+test.*
+t.*
+test
+/log/*
+/tmp
+/database/*.sqlite3

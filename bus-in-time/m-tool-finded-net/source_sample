@@ -1,0 +1,82 @@
+<div id="tInfo">
+    <div class="linename">326路</div>
+    <div class="lineinfo">开往&nbsp;<span id="upend">科学城(天泰二路)总站-黄埔港总站</span><span id="downend"></span></div>
+    <div class="cbwrap">
+        <div class="changewrap" onclick="BackBus(this)" id="backString" data-url="/index.php?m=Bus&c=Bus&a=line&l=Ysaa4uFcm75skQuLm0TI1w-2x-2x%2F0">返程</div>
+    </div>
+</div>
+<div id="view">
+    <div class="stawrap">
+    </div>
+
+    
+    <ul id="upInfo" class="stacontent">
+        <li >
+                                                <div class="num ">1</div>
+                <div class="station">科学城(天泰二路)总站</div>
+            </li><li >
+                                                <div class="num ">2</div>
+                <div class="station">天丰路站</div>
+            </li><li >
+                                                <div class="num ">3</div>
+                <div class="station">揽月路站</div>
+            </li><li >
+                                                <div class="num ">4</div>
+                <div class="station">广州科技创新基地站</div>
+            </li><li >
+                                                <div class="num ">5</div>
+                <div class="station">科丰路北站</div>
+            </li><li >
+                                                <div class="num ">6</div>
+                <div class="station">科丰路中站</div>
+            </li><li >
+                                                <div class="num ">7</div>
+                <div class="station">上堂站</div>
+            </li><li >
+                                                <div class="num ">8</div>
+                <div class="station">姬堂站</div>
+            </li><li >
+                                                <div class="num ">9</div>
+                <div class="station">丰乐北横路口站</div>
+            </li><li >
+                                                <div class="num ">10</div>
+                <div class="station">碧山村站</div>
+            </li><li >
+                                                <div class="num ">11</div>
+                <div class="station">黄埔体育馆站</div>
+            </li>
+
+            <li >
+                <div class="bus">
+                    <img src="/Static/Bus/Images/bus.png">
+                </div>
+                                                <div class="num ">12</div>
+                <div class="station">丰乐北路站</div>
+            </li>
+
+            <li >
+                                                <div class="num ">13</div>
+                <div class="station">大沙东站</div>
+            </li>
+
+            <li >
+                <div class="bus" style="top:30px;">
+                    <img src="/Static/Bus/Images/bus.png">
+                </div>
+
+                <div class="num ">14</div>
+                <div class="station">大沙西站</div>
+            </li>
+
+            <li >
+                                                <div class="num ">15</div>
+                <div class="station">大沙地站</div>
+            </li>
+
+            <li class="endli">
+                                                <div class="num endnum">16</div>
+                <div class="station">黄埔港总站</div>
+            </li>    
+
+            </ul>
+</div>
