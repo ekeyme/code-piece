@@ -15,28 +15,32 @@ if sys.version_info[1] < 5:
     def run(args, input=None, stdout=None, stderr=None, shell=False, timeout=None):
         
         p = subprocess.Popen(args, stdout=stdout, stderr=stderr, shell=shell)
-        p.stdout, p.stderr = p.communicate(input=input, timeout=timeout)
+        try:
+            p.stdout, p.stderr = p.communicate(input=input, timeout=timeout)
+        except TimeoutExpired:
+            p.kill()
+            raise
         return p
     subprocess.run = run
 
 
-v = """
-Frankfurt, DE: https://fra-de-ping.vultr.com/vultr.com.100MB.bin
-Paris, France: https://par-fr-ping.vultr.com/vultr.com.100MB.bin
-Amsterdam, NL: https://ams-nl-ping.vultr.com/vultr.com.100MB.bin
-London, UK: https://lon-gb-ping.vultr.com/vultr.com.100MB.bin
-New York (NJ): https://nj-us-ping.vultr.com/vultr.com.100MB.bin
-Singapore: https://sgp-ping.vultr.com/vultr.com.100MB.bin
-Chicago, Illinois: https://il-us-ping.vultr.com/vultr.com.100MB.bin
-Atlanta, Georgia: https://ga-us-ping.vultr.com/vultr.com.100MB.bin
-Miami, Florida: https://fl-us-ping.vultr.com/vultr.com.100MB.bin
-Tokyo, Japan: https://hnd-jp-ping.vultr.com/vultr.com.100MB.bin
-Dallas, Texas: https://tx-us-ping.vultr.com/vultr.com.100MB.bin
-Seattle, Washington: https://wa-us-ping.vultr.com/vultr.com.100MB.bin
-Silicon Valley, California: https://sjo-ca-us-ping.vultr.com/vultr.com.100MB.bin
-Los Angeles, California: https://lax-ca-us-ping.vultr.com/vultr.com.100MB.bin
-Sydney, Australia: https://syd-au-ping.vultr.com/vultr.com.100MB.bin
-"""
+# v = """
+# Frankfurt, DE: https://fra-de-ping.vultr.com/vultr.com.100MB.bin
+# Paris, France: https://par-fr-ping.vultr.com/vultr.com.100MB.bin
+# Amsterdam, NL: https://ams-nl-ping.vultr.com/vultr.com.100MB.bin
+# London, UK: https://lon-gb-ping.vultr.com/vultr.com.100MB.bin
+# New York (NJ): https://nj-us-ping.vultr.com/vultr.com.100MB.bin
+# Singapore: https://sgp-ping.vultr.com/vultr.com.100MB.bin
+# Chicago, Illinois: https://il-us-ping.vultr.com/vultr.com.100MB.bin
+# Atlanta, Georgia: https://ga-us-ping.vultr.com/vultr.com.100MB.bin
+# Miami, Florida: https://fl-us-ping.vultr.com/vultr.com.100MB.bin
+# Tokyo, Japan: https://hnd-jp-ping.vultr.com/vultr.com.100MB.bin
+# Dallas, Texas: https://tx-us-ping.vultr.com/vultr.com.100MB.bin
+# Seattle, Washington: https://wa-us-ping.vultr.com/vultr.com.100MB.bin
+# Silicon Valley, California: https://sjo-ca-us-ping.vultr.com/vultr.com.100MB.bin
+# Los Angeles, California: https://lax-ca-us-ping.vultr.com/vultr.com.100MB.bin
+# Sydney, Australia: https://syd-au-ping.vultr.com/vultr.com.100MB.bin
+# """
 
 def ping_test(host, count=5):
     count =  str(count)
@@ -88,7 +92,9 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description='vultr.com connecting test')
     args = parser.parse_args()
-    for name, url in map(lambda x: x.split(': '), v.strip().split('\n')):
+    for name, url in map(lambda x: x.split('\t'), 
+                         sys.stdin.read().strip().split('\n')):
+        url = url.strip()
         host = url.split('/', 3)[2]
         r = ping_test(host)
         print(name, end=': ')
