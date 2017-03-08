@@ -90,10 +90,13 @@ def download_test(url):
 
 def main():
     import argparse
+    import random
     parser = argparse.ArgumentParser(description='vultr.com connecting test')
     args = parser.parse_args()
-    for name, url in map(lambda x: x.split('\t'), 
-                         sys.stdin.read().strip().split('\n')):
+
+    lines = sys.stdin.read().strip().split('\n')
+    random.shuffle(lines)
+    for name, url in map(lambda x: x.split('\t'), lines):
         url = url.strip()
         host = url.split('/', 3)[2]
         r = ping_test(host)
