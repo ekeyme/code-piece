@@ -8,7 +8,7 @@ import subprocess
 from subprocess import TimeoutExpired
 
 if sys.version_info[0] < 3:
-    raise Exception("python3 is required")
+    raise Exception("python3+ is required")
 
 if sys.version_info[1] < 5:
     # monkey patch for < py3.5
@@ -43,6 +43,8 @@ if sys.version_info[1] < 5:
 # """
 
 def ping_test(host, count=5):
+    """Return (packets, loss_percent, average_time) or, if something wrong, None """
+
     count =  str(count)
     if sys.platform.startswith('win'):
         def ping(host, count):
@@ -72,6 +74,8 @@ def ping_test(host, count=5):
 
 
 def download_test(url):
+    """Retrun average_download_speed or, if something wrong, None"""
+
     import locale
     from os import devnull
     try:
@@ -89,8 +93,10 @@ def download_test(url):
 
 
 def main():
-    import argparse
+    import time
     import random
+    import argparse
+
     parser = argparse.ArgumentParser(description='vultr.com connecting test')
     args = parser.parse_args()
 
@@ -99,15 +105,14 @@ def main():
     for name, url in map(lambda x: x.split('\t'), lines):
         url = url.strip()
         host = url.split('/', 3)[2]
+
+        test_time = time.asctime()
         r = ping_test(host)
-        print(name, end=': ')
-        if r:
-            print('ping: {} packets transmitted, {} loss, {} agv'.format(*r), 
-                  end='; ')
+        ping_result = 'ping: {} packets transmitted, {} loss, {} agv' \
+                      .format(*r) if r else ''
         r = download_test(url)
-        if r:
-            print('speed: {}'.format(r), end='')
-        print()
+        download_result = r or ''
+        print('\t'.join([name, test_time, download_result, ping_result]))
 
 
 if __name__ == '__main__':
