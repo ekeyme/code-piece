@@ -91,8 +91,8 @@ fun remove_card(cards, card_to_remove: card, e) =
 fun all_same_color(cards) =
 	case cards of
 		  [] => true
-		| card::[] => true
-		| card1::(card2::cards') => card_color(card1) = card_color(card2) andalso all_same_color(card2::cards')
+		| _::[] => true
+		| card1::(card2::cards') => (card_color(card1) = card_color(card2) andalso all_same_color(card2::cards'))
 
 
 fun sum_cards(cards) =
@@ -127,5 +127,9 @@ fun officiate(card_list, moves, goal) =
 					| (card::card_list', Draw::moves') => play_next(card_list', moves', card::held_cards)
 					| (card::_, Discard(card_to_remove)::moves') => play_next(card_list, moves', remove_card(held_cards, card_to_remove, IllegalMove))
 	in
-		score(#3 (play_next(card_list, moves, [])), goal)
+		let
+			val (_, _, held_cards) = play_next(card_list, moves, [])
+		in
+			score(held_cards, goal)
+		end
 	end
