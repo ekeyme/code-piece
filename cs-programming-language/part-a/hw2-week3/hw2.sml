@@ -133,3 +133,31 @@ fun officiate(card_list, moves, goal) =
 			score(held_cards, goal)
 		end
 	end
+
+
+fun sum_cards_with_changeable_ace(ace_num, cards) =
+	let
+		fun card_value(card) =
+			case card of
+				  (_, Ace) => ace_num
+				| (_, Num v) => v
+				| _ => 10
+		fun aux(cards, acc) =
+			case cards of
+				  [] => acc
+				| x::tl => aux(tl, card_value(x)+acc)
+	in
+		aux(cards, 0)
+	end
+
+
+fun score_challengen(cards, goal) =
+	let
+		fun cal_pscore(sum) =
+			if sum > goal then 3 * (sum - goal) else goal - sum
+		val sum1 = cal_pscore(sum_cards_with_changeable_ace(1, cards))
+		val sum2 = cal_pscore(sum_cards_with_changeable_ace(11, cards))
+		val pscore = if sum1 < sum2 then sum1 else sum2
+	in
+		if all_same_color(cards) then pscore div 2 else pscore
+	end

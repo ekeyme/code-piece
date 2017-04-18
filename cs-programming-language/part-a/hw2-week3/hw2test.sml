@@ -41,5 +41,8 @@ val test13 = ((officiate([(Clubs,Jack),(Spades,Num(8))],
                          42);
                false) 
               handle IllegalMove => true)
+
+val test14_1 = score_challengen([(Hearts, Num 9), (Clubs, Ace)], 10) = 0
+val test14_2 = score_challengen([(Hearts, Num 9), (Clubs, Ace)], 20) = 0
              
              
