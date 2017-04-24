@@ -21,7 +21,7 @@ fun g f1 f2 p =
 	case p of
 	    Wildcard          => f1 ()
 	  | Variable x        => f2 x
-	  | TupleP ps         => List.foldl (fn (p,i) => (r p) + i) 0 ps
+	  | TupleP ps         => List.foldl (fn (p, i) => (r p) + i) 0 ps
 	  | ConstructorP(_,p) => r p
 	  | _                 => 0
     end
@@ -84,9 +84,63 @@ fun all_answers f xs =
 		fun aux(xs, acc) =
 			case xs of
 				  [] => acc
-				| x::xs' => case f(x) of
-								  NONE => []
-								| SOME vs => acc @ vs
+				| x::xs' => case (f(x), acc) of
+								  (SOME vs, SOME ys) =>  aux(xs', (SOME (ys @ vs)))
+								| _ => NONE
   	in
-  		
+  		aux(xs, (SOME []))
 	end
+
+fun all_answers2 f xs =
+	let
+		fun helper_fun(x, acc) =
+			case (f(x), acc) of
+				  (SOME v, SOME acc_v) => SOME (acc_v @ v)
+				| _ => NONE
+	in
+		List.foldl helper_fun (SOME []) xs
+	end
+
+(*problem 9a*)
+val count_wildcards = g (fn () => 1) (fn s => 0)
+
+
+(*problem 9b*)
+val count_wild_and_variable_lengths = g (fn () => 1) (fn s => String.size s)
+
+
+(*problem 9c*)
+fun count_some_var (val_name, p) =
+	g (fn () => 0) (fn s => if s = val_name then 1 else 0) p
+
+
+(*problem 10*)
+fun check_pat p =
+	let
+		fun get_all_variable_names p =
+			case p of
+				  Variable s => [s]
+				| TupleP ps => List.foldl (fn (p, acc) => 
+												(acc @ (get_all_variable_names p))) [] ps
+				| _ => []
+		fun is_uniq_strings (xs : string list) =
+			 case xs of
+			 	  [] => true
+			 	| x::xs' => not (List.exists (fn y => y = x) xs') andalso is_uniq_strings xs'
+	in
+		is_uniq_strings (get_all_variable_names p)
+	end
+
+
+(*problem 11*)
+fun match (v, p) =
+	case (v, p) of
+		  (_, Wildcard) => SOME []
+		| (v, Variable s) => SOME [(s, v)]
+		| (Unit, UnitP) => SOME []
+		| (Const x, ConstP y) => if x = y then SOME [] else NONE
+		| (Tuple vs, TupleP ps) => if List.size vs = List.size ps
+								   then 
+								   else NONE
+		| (Constructor(s1, v), ConstructorP(s2, p)) => if s1 = s2 then match(v, p) else NONE
+		| _ => NONE
