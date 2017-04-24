@@ -144,3 +144,9 @@ fun match (v, p) =
 								   else NONE
 		| (Constructor(s1, v), ConstructorP(s2, p)) => if s1 = s2 then match(v, p) else NONE
 		| _ => NONE
+
+
+(*problem 12*)
+fun first_match v ps =
+	(SOME (first_answer (fn x => match (v, x)) ps)) 
+	handle NoAnswer => NONE
