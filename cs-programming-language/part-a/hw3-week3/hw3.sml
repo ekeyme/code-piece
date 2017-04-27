@@ -151,7 +151,7 @@ fun first_match v ps =
 	(SOME (first_answer (fn x => match (v, x)) ps)) 
 	handle NoAnswer => NONE
 
-
+(*challenge problem*)
 fun typecheck_patterns (lst, ps) =
 	let
 		fun comp_types x =
@@ -197,5 +197,8 @@ fun typecheck_patterns (lst, ps) =
 							| SOME _ => (Datatype dtyp_name)
 					end
 	in
-		1
+		(List.foldl (
+						fn (x, acc) => case acc of NONE => NONE | SOME t => comp_types (x, t)
+				    ) (SOME Anything) (List.map pattern2type ps)
+		) handle NoAnswer => NONE
 	end
