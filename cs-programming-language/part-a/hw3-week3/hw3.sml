@@ -59,7 +59,7 @@ fun longest_string_helper f xs =
 val longest_string3 = longest_string_helper (fn (size_x, size_acc) => size_x > size_acc)
 
 
-val longest_string4 = longest_string_helper (fn (size_x, size_acc) => size_x < size_acc)
+val longest_string4 = longest_string_helper (fn (size_x, size_acc) => size_x >= size_acc)
 
 
 (*problem 5*)
@@ -150,3 +150,52 @@ fun match (v, p) =
 fun first_match v ps =
 	(SOME (first_answer (fn x => match (v, x)) ps)) 
 	handle NoAnswer => NONE
+
+
+fun typecheck_patterns (lst, ps) =
+	let
+		fun comp_types x =
+			case x of
+				  (Anything, t) => SOME t
+				| (t, Anything) => SOME t
+				| (UnitT, UnitT) => SOME UnitT
+				| (IntT, IntT) => SOME IntT
+				| (Datatype(t1), Datatype(t2)) => 
+					if t1 = t2 then SOME (Datatype t1) else NONE
+				| (TupleT(ts1), TupleT(ts2)) => 
+					if List.length ts1 = List.length ts2
+					then let val t_lst = List.map comp_types (ListPair.zip(ts1, ts2)) 
+						 in if (List.exists (fn x => x = NONE) t_lst) 
+						 	then NONE 
+						 	else SOME (TupleT (List.map valOf t_lst))
+						 end
+					else NONE
+				| _ => NONE
+
+		fun find_datatype (cname : string, lst) =
+			case lst of
+				  [] => raise NoAnswer
+				| (name, dtyp, typ)::tail => if cname = name 
+											 then (dtyp, typ) 
+											 else find_datatype(cname, tail)
+
+		(*infer type from one pattern*)
+		fun pattern2type p =
+			case p of
+				  Wildcard => Anything
+				| Variable _ => Anything
+				| UnitP => UnitT
+				| ConstP _ => IntT
+				| TupleP ps => TupleT(List.map pattern2type ps)
+				| ConstructorP(cname, p) => 
+					let 
+						val (dtyp_name, t1) = find_datatype (cname, lst)
+						val t2 = pattern2type p
+					in
+						case comp_types (t1, t2) of
+							  NONE => raise NoAnswer
+							| SOME _ => (Datatype dtyp_name)
+					end
+	in
+		1
+	end
