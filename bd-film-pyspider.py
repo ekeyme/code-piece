@@ -4,6 +4,7 @@
 # Project: bd_film
 
 from pyspider.libs.base_handler import *
+from base64 import b64encode, b64decode
 import re
 
 
@@ -31,7 +32,7 @@ class Handler(BaseHandler):
     @config(age=10 * 24 * 60 * 60)
     def index_page(self, response):
         for each in response.doc('table.table:nth-child(1) tr td a[href^="http://www.bd-film.com"]:nth-child(3)').items():
-            self.crawl(each.attr.href, callback=self.detail_page, fetch_type='js')
+            self.crawl(each.attr.href, callback=self.detail_page)
 
     @config(priority=2)
     def detail_page(self, response):
@@ -48,7 +49,21 @@ class Handler(BaseHandler):
         }
 
     def get_thunder_urls(self, doc):
+        r = re.search(r'function\(p,a,c,k,e,r\).+var urls *= *"([^ ]+?)", ', doc.text(), re.S)
+        if not r:
+            return
+
+        b64 = b64decode(r.group(1)[::-1])
+        try:
+            urls = b64.decode('utf8')
+        except UnicodeDecodeError:
+            urls = b64.decode('gbk')
+        thunder_urls = ['thunder://' + b64encode(('AA'+x+'ZZ').encode('gbk')).decode('ascii') for x in urls.split('###')]
+
+        # thunder_urls list length should be the same with the amount of 迅雷下载
+        i = 0
         for each in doc('#bs-docs-download table tr').items():
-            thunder = each('td a[href^="thunder://"]')
+            thunder = each('td a[title$="迅雷下载"]')
             if thunder:
-                yield (each('.bd-address a').text(), thunder.attr.href)
+                yield (each('.bd-address a').text(), thunder_urls[i])
+                i+=1
