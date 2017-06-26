@@ -22,7 +22,7 @@ class Handler(BaseHandler):
         for url in urls:
             self.crawl(url+'index.htm', callback=self.detect_page, save={'url': url})
 
-    @config(age=24 * 60 * 60)
+    @config(age=24 * 60 * 60, priority=1)
     def detect_page(self, response):
         last_page = response.doc('.pagination > ul:nth-child(1) > li:nth-child(11) > a:nth-child(1)').attr('href')
         last_page_num = int(re.search(r'index_(\d+)\.htm', last_page).group(1))
