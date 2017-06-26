@@ -48,5 +48,7 @@ class Handler(BaseHandler):
         }
 
     def get_thunder_urls(self, doc):
-        for each in doc('#bs-docs-download a[href^="thunder://"]').items():
-            yield (each.attr.title, each.attr.href)
+        for each in doc('#bs-docs-download table tr').items():
+            thunder = each('td a[href^="thunder://"]')
+            if thunder:
+                yield (each('.bd-address a').text(), thunder.attr.href)
