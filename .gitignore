@@ -1,9 +1,4 @@
 .DS_Store
+*.dSYM/
 __pycache__*
 __pycache__/*
-test.*
-t.*
-test
-/log/*
-/tmp
-/database/*.sqlite3
