@@ -58,7 +58,7 @@ class Handler(BaseHandler):
             urls = b64.decode('utf8')
         except UnicodeDecodeError:
             urls = b64.decode('gbk')
-        thunder_urls = ['thunder://' + b64encode(('AA'+x+'ZZ').encode('gbk')).decode('ascii') for x in urls.split('###')]
+        thunder_urls = ['thunder://' + b64encode(('AA'+x+'ZZ').encode('gbk', errors="replace")).decode('ascii') for x in urls.split('###')]
 
         # thunder_urls list length should be the same with the amount of 迅雷下载
         i = 0
