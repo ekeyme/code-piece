@@ -1,28 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-struct Packet
+struct Address
 {
-    short PacketSize;
-    short Type;
+    int id;
+    char *name;
+    char *email;
 };
 
-struct SizeValidity
-{
-    short SizeEnc;
-};
 
-struct SendEncSecureCode
+int main(int argc, char const *argv[])
 {
-    struct Packet header;
-    short EncSecurityToken;
-    int lTime;
-    struct SizeValidity ending;
-};
+    struct Address *addr = malloc(sizeof(struct Address));
+    addr->id = 1;
+    addr->name = "ekeyme";
+    addr->email = "ekeyme@gmail.com";
 
-int main(int argc, const char *argv[])
-{
-	struct SendEncSecureCode sendpacket;
-	sendpacket.header.PacketSize = sizeof(struct SendEncSecureCode);
-	printf("%d\n", sendpacket.header.PacketSize);
-	return 0;
+    printf("The email of %s: %s: %d\n", addr->name, addr->email, addr->id);
+    free(addr);
+    return 0;
 }
