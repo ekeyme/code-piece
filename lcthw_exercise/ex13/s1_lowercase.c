@@ -1,54 +1,55 @@
 #include <stdio.h>
 
+char toLowerCase(char letter)
+{
+    if (letter >= 65 && letter <=90) {
+        return letter + 32;
+    } else {
+        return letter;
+    }
+}
+
 int main(int argc, char *argv[])
 {
-	if (argc != 2){
-		printf("error: you need one argument.\n");
-	}
+    if (argc != 2) {
+        printf("ERROR: You need one argument.\n");
+        
+        // this is how you abort a program
+        return 1;
+    }
 
-	int i = 0;
-	for (i = 0; argv[1][i] != '\0'; i++){
-		char letter = argv[1][i];
-		if (97 <= letter && letter <= 122){
-			letter = letter - 32;
-		}
+    int i = 0;
+    for (i = 0; argv[1][i] != '\0'; i++) {
+        char letter = argv[1][i];
+        char lowerCaseLetter = toLowerCase(letter);
 
-		switch (letter){
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-				printf("%c", letter);
-				break;
+        switch (lowerCaseLetter) {
+            case 'a':
+                printf("%d: '%c'\n", i, letter);
+                break;
+            case 'e':
+                printf("%d: '%c'\n", i, letter);
+                break;
+            case 'i':
+                printf("%d: '%c'\n", i, letter);
+                break;
+            case 'o':
+                printf("%d: '%c'\n", i, letter);
+                break;
+            case 'u':
+                printf("%d: '%c'\n", i, letter);
+                break;
+            case 'y':
+                if (i > 2) {
+                    // it's only sometimes Y
+                    printf("%d: '%c'\n", i, letter);
+                }
+                break;
+            default:
+                printf("%d: %c is not a vowel\n", i, letter);
+                break;
+        }
+    }
 
-			default:
-				break;
-		}
-	}
-
-	printf("\n");
-
-	return 0;
+    return 0;
 }
