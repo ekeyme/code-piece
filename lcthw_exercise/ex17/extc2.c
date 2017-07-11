@@ -123,14 +123,18 @@ void Database_create(struct Connection *conn, int max_data, int max_rows)
 	conn->db->max_rows = max_rows;
 
 	int i = 0;
+	int len = conn->db->max_data+1;
+	char null_str[len] = {'\0'};
 	for (i = 0; i < conn->db->max_rows; i++){
 		struct Address *addr = malloc(sizeof(struct Address));
 		if (!addr) die("Memory error");
 
 		addr->id = i;
 		addr->set = 0;
-		addr->name = malloc(conn->db->max_data+1);
-		addr->email = malloc(conn->db->max_data+1);
+		addr->name = malloc(len);
+		memcpy(addr->name, null_str, len);
+		addr->email = malloc(len);
+		memcpy(addr->email, null_str, len);
 		conn->db->rows[i] = addr;
 	}
 }
