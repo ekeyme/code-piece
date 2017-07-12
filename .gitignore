@@ -2,3 +2,4 @@
 *.dSYM/
 __pycache__*
 __pycache__/*
+/lcthw_exercise/*/t.c
