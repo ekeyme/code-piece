@@ -24,20 +24,30 @@ void push(struct Stack *stk, int x)
 {
 	assert(stk->top < MAX_SIZE);
 
-	stk->node[stk->top] = x;
-	stk->top++;
+	stk->node[stk->top++] = x;
 }
 
 int pop(struct Stack *stk)
 {
-	int i = stk->node[stk->top];
-	stk->top--;
+	assert(!empty(stk));
+	
+	int i = stk->node[--stk->top];
 	return i;
 }
 
 
 int main(int argc, char const *argv[])
 {
-	/* code */
+	struct Stack stk = Init_stack();
+	struct Stack *stkp = &stk;
+	assert(empty(stkp));
+
+	push(stkp, 1);
+	push(stkp, 2);
+
+	printf("%d\n", pop(stkp));
+	printf("%d\n", pop(stkp));
+	assert(empty(stkp));
+	pop(stkp);
 	return 0;
 }
