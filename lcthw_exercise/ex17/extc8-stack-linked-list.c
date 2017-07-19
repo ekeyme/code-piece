@@ -112,7 +112,8 @@ int main(int argc, char const *argv[])
 	printf("%d\n", pop(stk));
 	printf("%d\n", pop(stk));
 	assert(empty(stk));
-	pop(stk);
+	push(stk, 3);
+	printf("%d\n", pop(stk));
+	free_stk(stk);
 	return 0;
 }
-
