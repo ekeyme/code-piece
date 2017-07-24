@@ -55,7 +55,6 @@ void *Room_move(void *self, Direction direction)
         next = room->west;
     } else {
         printf("You can't do that direction.");
-        next = NULL;
     }
 
     if(next) {
@@ -150,7 +149,6 @@ int process_input(Map *game)
     printf("\n> ");
 
     char ch = getchar();
-    getchar(); // eat ENTER
 
     int damage = rand() % 4;
 
@@ -191,6 +189,8 @@ int process_input(Map *game)
         default:
             printf("What?: %d\n", ch);
     }
+    
+    getchar(); // eat ENTER
 
     return 1;
 }
