@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "egining test the game: "
+echo "###########"
+echo -e "n\nl\ns\na" | ./ex19
+echo "###########"
+echo -n "test game: "
+if (($? == 0)); then
+	echo ok
+else
+	echo fail
+fi
