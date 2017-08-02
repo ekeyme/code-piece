@@ -175,9 +175,9 @@ int process_input(Map *game)
             break;
 
         case 'a':
-
             game->_(attack)(game, damage);
             break;
+            
         case 'l':
             printf("You can go:\n");
             if(game->location->north) printf("NORTH\n");
