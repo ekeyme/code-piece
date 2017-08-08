@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include "dbg.h"
 
 #define MAX_DATA 100
@@ -19,6 +20,27 @@ typedef struct Person {
     EyeColor eyes;
     float income;
 } Person;
+
+// assume that there is null string in str
+char *trim(char *str)
+{
+    size_t i = 0;
+
+    while(*str[i]) {
+        if(!isspace(*str[i])) break;
+        i++;
+    }
+
+    // copy non-leading space str
+    char *str_ = str;
+    while(*str[i]) {
+        *str_++ = *str[i];
+        i++;
+    }
+
+    // deal with the space in the right side
+    while(str--)
+}
 
 int main(int argc, char *argv[])
 {
