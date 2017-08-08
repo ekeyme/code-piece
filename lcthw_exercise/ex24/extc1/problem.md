@@ -1,0 +1,1 @@
+# Rewrite this to not use fscanf at all. You'll need to use functions like atoi to convert the input strings to numbers.
