@@ -5,39 +5,33 @@
 #include <stdarg.h>
 #include "dbg.h"
 
-#define MAX_DATA 100
+#define MAX_DATA 10
 
-int read_string(char **out_string, int max_buffer)
+int read_string(char *out_string, int max_buffer)
 {
-	*out_string = calloc(1, max_buffer+1);
-	check_mem(*out_string);
-
-	char *result = fgets(*out_string, max_buffer, stdin);
+	log_info("out_string points to: %p", out_string);
+	char *result = fgets(out_string, max_buffer, stdin);
 	check(result != NULL, "Input error.");
 
 	return 0;
 
 error:
-	if (*out_string) free(*out_string);
-	*out_string = NULL;
 	return -1;
 }
 
 int read_int(long *out_int)
 {
-	char *input = NULL;
+	char input[MAX_DATA];
 	char *end = NULL;
-	int rc = read_string(&input, MAX_DATA);
+	int rc = read_string(input, MAX_DATA);
 	check(rc == 0, "Failed to read number");
 
 	*out_int = strtol(input, &end, 10);
-	check((*end == '\0' || *end == '\n') && *input != '\0', "Invalid number: %s", input);
+	check((*end == '\0' || *end == '\n') && input[0] != '\0', "Invalid number: %s", input);
 
-	free(input);
 	return 0;
 
 error:
-	if(input) free(input);
 	return -1;
 }
 
@@ -47,7 +41,7 @@ int read_scan(const char *fmt, ...)
 	int rc = 0;
 	long *out_int = NULL;
 	char *out_char = NULL;
-	char **out_string = NULL;
+	char *out_string = NULL;
 	int max_buffer = 0;
 
 	va_list argp;
@@ -74,7 +68,9 @@ int read_scan(const char *fmt, ...)
 
 				case 's':
 					max_buffer = va_arg(argp, int);
-					out_string = va_arg(argp, char **);
+					log_info("max_buffer is: %d", max_buffer);
+					out_string = va_arg(argp, char *);
+					log_info("out_string points to: %p", out_string);
 					rc = read_string(out_string, max_buffer);
 					check(rc == 0, "Failed to read string.");
 					break;
@@ -99,35 +95,16 @@ error:
 
 int main(int argc, char *argv[])
 {
-	char *first_name = NULL;
-	char initial = ' ';
-	char *last_name = NULL;
-	long age = 0;
+	char first_name[MAX_DATA] = {'\0'};
+	printf("first_name points to: %p\n", first_name);
 
 	printf("What's you first name? ");
-	int rc = read_scan("%s", MAX_DATA, &first_name);
+	int rc = read_scan("%s", MAX_DATA, first_name);
 	check(rc == 0, "Failed first name.");
 
-	printf("What's you initial? ");
-	rc = read_scan("%c\n", &initial);
-	check(rc == 0, "Failed initial.");
-
-	printf("What's your last name? ");
-	rc = read_scan("%s", MAX_DATA, &last_name);
-	check(rc == 0, "Failed last name.");
-
-	printf("How old are you? ");
-	rc = read_scan("%d", &age);
-	check(rc == 0, "Failed to read age.")
-
 	printf("---- RESULTS ----\n");
-	printf("First Name: %s", first_name);
-	printf("Initial: '%c'\n", initial);
-	printf("Last Name: %s", last_name);
-	printf("Age: %ld\n", age);
-
-	free(first_name);
-	free(last_name);
+	printf("First Name: '%s'", first_name);
+	
 	return 0;
 
 error:
