@@ -79,3 +79,43 @@ error: // fallthrough
 
 	return res;
 }
+
+int DB_init()
+{
+	apr_pool_t *p = NULL;
+	apr_pool_initialize();
+	apr_pool_create(&p, NULL);
+
+	if(access(DB_DIR, W_OK | X_OK) == -1) {
+		apr_status_r rc = apr_dir_make_recursive(DB_DIR, 
+			APR_UREAD | APR_UWRITE | APR_UEXECUTE | 
+			APR_GREAD | APR_GWRITE | APR_GEXECUTE, p);
+		check(rc == APR_SUCCESS, "Failed to make database dir: %s", DB_DIR)
+	}
+
+	if(access(DB_FILE, W_OK | X_OK) == -1) {
+		FILE *db = DB_open(DB_FILE, "w");
+		check(db, "Cannot open database: %s", DB_FILE);
+		DB_close(db);
+	}
+
+	apr_pool_destroy(p);
+	return 0;
+
+error:
+	apr_pool_destroy(p);
+	return -1;
+}
+
+int DB_list()
+{
+	bstring data = DB_load();
+	check(data, "Failed to read load: %s", DB_FILE);
+
+	printf("%s", bdata(data));
+	bdestroy(data);
+	return 0;
+
+error:
+	return -1;
+}
