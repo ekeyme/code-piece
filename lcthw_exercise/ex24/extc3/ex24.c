@@ -24,7 +24,7 @@ typedef struct Person {
 // Trims leading whitespace chars in left `str`, then copy at almost `n - 1` chars
 // into the `out` buffer in which copying might stop when the first '\0' occurs, 
 // and finally append '\0' to the position of the last non-trailing whitespace char.
-// Reture the length the trimed string which '\0' is not count in like strlen().
+// Reture the length the trimed string which '\0' is not counted in like strlen().
 size_t trim(char *out, size_t n, const char *str)
 {
     // do nothing
