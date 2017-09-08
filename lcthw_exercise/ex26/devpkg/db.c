@@ -28,6 +28,7 @@ static bstring DB_load()
 	check(data, "Failed to read from db file: %s", DB_FILE);
 
 	DB_close(db);
+
 	return data;
 
 error:
@@ -51,6 +52,7 @@ int DB_update(const char *url)
 	int rc = fwrite(line->data, blength(line), 1, db);
 	check(rc == 1, "Failed to append to the db.");
 
+	DB_close(db);
 	return 0;
 
 error:
@@ -87,7 +89,7 @@ int DB_init()
 	apr_pool_create(&p, NULL);
 
 	if(access(DB_DIR, W_OK | X_OK) == -1) {
-		apr_status_r rc = apr_dir_make_recursive(DB_DIR, 
+		apr_status_t rc = apr_dir_make_recursive(DB_DIR, 
 			APR_UREAD | APR_UWRITE | APR_UEXECUTE | 
 			APR_GREAD | APR_GWRITE | APR_GEXECUTE, p);
 		check(rc == APR_SUCCESS, "Failed to make database dir: %s", DB_DIR)
