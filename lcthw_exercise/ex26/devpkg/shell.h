@@ -8,6 +8,7 @@
 typedef struct Shell {
 	const char *dir;
 	const char *exe;
+	const int accept_argc;
 
 	apr_procattr_t *attr;
 	apr_proc_t proc;
