@@ -69,11 +69,7 @@ int DB_find(const char *url)
 	data = DB_load();
 	check(data, "Failed to load: %s", DB_FILE);
 
-	if(binstr(data, 0, line) == BSTR_ERR) {
-		res = 0;
-	} else {
-		res = 1;
-	}
+	res = (binstr(data, 0, line) == BSTR_ERR) ? 0 : 1;
 
 error: // fallthrough
 	if(data) bdestroy(data);

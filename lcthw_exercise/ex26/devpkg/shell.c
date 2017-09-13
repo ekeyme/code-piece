@@ -80,6 +80,9 @@ int Shell_run(apr_pool_t *p, Shell *cmd)
 	rv = apr_procattr_dir_set(attr, cmd->dir);
 	check(rv == APR_SUCCESS, "Failed to set root to %s", cmd->dir);
 
+	rv = apr_procattr_cmdtype_set(attr, APR_PROGRAM_PATH);
+	check(rv == APR_SUCCESS, "Failed to set path.");
+
 	rv = apr_proc_create(&newproc, cmd->exe, cmd->args, NULL, attr, p);
 	check(rv == APR_SUCCESS, "Failed to run command");
 
@@ -144,11 +147,3 @@ Shell INSTALL_SH = {
 	.accept_argc = 1,
 	.args = {"sudo", "make", "TARGET", NULL}
 };
-
-
-int main(int argc, char const *argv[])
-{
-	Shell_exec(CURL_SH, "TARGET", argv[1], "URL", argv[2], NULL);
-
-	return 0;
-}
