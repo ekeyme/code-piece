@@ -1,0 +1,11 @@
+## coomand.c 实现上要修改的地方
+
+ 1. Command_fetch 中，fetch解决依赖(DEPENDS)那一步同时提供了从远程uri或者本地/tmp/DEPENDS安装依赖的方式，让人感觉迷糊
+ 	1. 没有解决依赖中的依赖（现有方式无法轻易做到）
+ 	2. 即使提供的是一个远程的uri依赖，也只能是一个http(*)/ftp 等方式的远程文件，里面的内容应该要像 /tmp/DEPENDS 的内容一样，每行记录都是一个软件包的url地址
+ 	3. 注释中的 recursive... 让人误以为可以解决依赖中的依赖问题
+ 	综上所述，我认为应该在判断uri为DEPENDS后，
+ 		1. 将else if 代码块中的大部分抽离形成一个独立的函数解决依赖问题
+ 		2. 不要recursive那个注释
+ 		3. 移除远程uri的方式
+ 2. 最好将  install 步骤从 Command_build 分离出来，写到 Command_install 里面 
