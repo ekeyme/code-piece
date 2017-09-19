@@ -1,0 +1,22 @@
+devpkg
+======
+
+A simple package management tool. It make you easy to fetch a package from remote url, build a package, install a package
+or combine them together.
+
+Requirements
+------------
+
+* Apache Portable Runtime, APR
+* Apache Portable Runtime Utility, APR-util
+
+Installation
+------------
+
+to do.
+
+Usage
+-----
+
+
+
