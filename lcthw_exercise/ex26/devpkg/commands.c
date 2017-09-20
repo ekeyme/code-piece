@@ -53,7 +53,7 @@ int Command_fetch(apr_pool_t *p, const char *url, int fetch_only)
 		if(info.scheme) {
 			depends_file = DEPENDS_PATH;
 			rc = Shell_exec(CURL_SH, "URL", url, "TARGET", depends_file, NULL);
-			check(rc == 0; "Curl failed.")
+			check(rc == 0, "Curl failed.")
 		} else {
 			depends_file = info.path;
 		}
@@ -153,7 +153,7 @@ int Command_install(apr_pool_t *p, const char *url, const char *configure_opts,
 
 	if(rc == 1) {
 		rc = Command_build(p, url, configure_opts, make_opts, install_opts);
-		check(rc == 0; "Failed to build: %s")
+		check(rc == 0, "Failed to build: %s", url)
 	} else if(rc == 0) {
 		// no install needed
 		log_info("Depends successfully installed: %s", url);

@@ -17,6 +17,7 @@ int main(int argc, char const *argv[])
 	apr_getopt_t *opt;
 	apr_status_t rv;
 
+	int rc = 0;
 	char ch = '\0';
 	const char *optarg = NULL;
 	const char *config_opts = NULL;
@@ -66,6 +67,7 @@ int main(int argc, char const *argv[])
 
 			default:
 				// do nothing
+				break;
 		}
 	}
 
@@ -76,7 +78,7 @@ int main(int argc, char const *argv[])
 			break;
 
 		case COMMAND_LIST:
-			int rc = DB_list();
+			rc = DB_list();
 			check(rc == 0, "Failed to list packages.");
 			break;
 

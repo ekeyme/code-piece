@@ -1,8 +1,8 @@
 #ifndef _db_h
 #define _db_h
 
-#define DB_FILE "/home/mozz/vm-share/.devpkg/db"
-#define DB_DIR "/home/mozz/vm-share/.devpkg"
+#define DB_FILE "/tmp/.devpkg/db"
+#define DB_DIR "/tmp/.devpkg"
 
 int DB_init();
 int DB_list();
