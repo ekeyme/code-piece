@@ -142,8 +142,8 @@ Shell MAKE_SH = {
 };
 
 Shell INSTALL_SH = {
-	.exe = "sudo",
+	.exe = "make",
 	.dir = "/tmp/pkg-build",
 	.accept_argc = 1,
-	.args = {"sudo", "make", "TARGET", NULL}
+	.args = {"make", "TARGET", NULL}
 };

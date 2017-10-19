@@ -1,6 +1,6 @@
 PREFIX?=/usr/local
-CFLAGS=-g -Wall -I/usr/include/apr-1/ 
-LDFLAGS=-L/usr/lib -lapr-1 -pthread -laprutil-1
+CFLAGS=-g -Wall -I/home/mozz/vm-share/opt/include/apr-1/ 
+LDFLAGS=-L/home/mozz/vm-share/opt/lib -lapr-1 -pthread -laprutil-1
 
 all: devpkg
 

@@ -102,8 +102,10 @@ int main(int argc, char const *argv[])
 			sentinel("Invalid command given.");
 	}
 
+	apr_pool_destroy(p);
 	return 0;
 
 error:
+	apr_pool_destroy(p);
 	return 1;
 }
