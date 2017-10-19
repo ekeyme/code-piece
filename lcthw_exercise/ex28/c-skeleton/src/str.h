@@ -1,0 +1,1 @@
+char *strrev(char *s);
