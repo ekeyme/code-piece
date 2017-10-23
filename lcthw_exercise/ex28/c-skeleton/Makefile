@@ -31,9 +31,9 @@ build:
 
 # The Unit Tests
 .PHONY: tests
-tests: CFLAGS += $(TARGET)
+tests: CFLAGS += -Lbuild -lYOUR_LIBRARY
 tests: $(TESTS)
-	sh ./tests/runtests.sh
+	LD_LIBRARY_PATH=build sh ./tests/runtests.sh
 
 valgrind:
 	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log" $(MAKE)

@@ -4,9 +4,9 @@
 
 int main()
 {
-	char *s = "abc123";
+	char s[] = "abc123";
 	char *ex = "321cba";
-
+	
 	check(strcmp(strrev(s), ex)==0, "strrev is failed.");
 
 	return 0;
