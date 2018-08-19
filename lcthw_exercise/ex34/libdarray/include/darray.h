@@ -13,6 +13,7 @@ typedef struct DArray {
 	void **contents;
 } DArray;
 
+
 DArray *DArray_create(size_t element_size, size_t initial_max);
 
 void DArray_destroy(DArray *array);
@@ -58,6 +59,8 @@ error:
 
 // TO-DO(ekeyme): we should make return value differ between the true value and
 // the error.
+// Note(ekeyme): I think if the slot is a NULL point in Darray.contents, that
+// mean this slot is in initial status or is removed.
 static inline void *DArray_remove(DArray *array, int i)
 {
 	check(i < array->max, "darray attempt to remove past max");
