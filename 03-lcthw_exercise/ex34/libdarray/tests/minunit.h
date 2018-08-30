@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include "lcthw/dbg.h"
-#include <stdlib.h>
+// #include <stdlib.h>
 
 #define mu_suite_start() char *message = NULL
 

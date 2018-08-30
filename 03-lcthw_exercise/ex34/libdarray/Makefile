@@ -8,11 +8,11 @@ OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 TEST_SRC=$(wildcard tests/*_tests.c)
 TESTS=$(patsubst %.c,%,$(TEST_SRC))
 
-TARGET=build/libYOUR_LIBRARY.a
+TARGET=build/libdarray.a
 SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 
 # The Target Build
-all: $(TARGET) $(SO_TARGET) tests
+all: $(TARGET)
 
 dev: CFLAGS=-g -Wall -Isrc -Wall -Wextra $(OPTFLAGS)
 dev: all
@@ -31,7 +31,7 @@ build:
 
 # The Unit Tests
 .PHONY: tests
-tests: CFLAGS += -Itests -Lbuild -lYOUR_LIBRARY
+tests: CFLAGS += -Iinclude -Itests -Lbuild -ldarray
 tests: $(TESTS)
 	LD_LIBRARY_PATH=build sh ./tests/runtests.sh
 

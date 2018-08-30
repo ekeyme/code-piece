@@ -9,7 +9,7 @@ char *test_create()
 {
 	array = DArray_create(sizeof(int), 100);
 	mu_assert(array != NULL, "DArray_create failed.");
-	mu_assert(array->content != NULL, "content are wrong in darray.");
+	mu_assert(array->contents != NULL, "content are wrong in darray.");
 	mu_assert(array->end == 0, "end isn't at the right spot.");
 	mu_assert(array->element_size == sizeof(int), 
 			  "element size is wrong.");
@@ -56,11 +56,11 @@ char *test_remove()
 {
 	int *val_check = DArray_remove(array, 0);
 	mu_assert(*val_check != NULL, "Should not get NULL.");
-	mu_assert(*val_check == *val, "Should get the first value.");
+	mu_assert(*val_check == *val1, "Should get the first value.");
 	mu_assert(DArray_get(array, 0) == NULL, "Should be gone.");
 	DArray_free(val_check);
 
-	val_check = Darray_remove(array, 1);
+	val_check = DArray_remove(array, 1);
 	mu_assert(val_check != NULL, "Should not get NUL.");
 	mu_assert(*val_check == *val2, "Should get the second value,");
 	mu_assert(DArray_get(array, 1) == NULL, "Should be gone.");
